@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حساب النفقة الشرعية</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            margin: 0;
+            background-image: url('/img2.jpg');
+        }
+        h1 {
+            color: navajowhite;
+        }
+        .container {
+            background: #fff;
+            padding: 100px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            background-image: url('/img2.jpg');
+            color: navajowhite;
+        }
+        input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #c2fbd7;
+            border-radius: 100px;
+            box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset, rgba(44, 187, 99, .15) 0 1px 2px, rgba(44, 187, 99, .15) 0 2px 4px, rgba(44, 187, 99, .15) 0 4px 8px, rgba(44, 187, 99, .15) 0 8px 16px, rgba(44, 187, 99, .15) 0 16px 32px;
+            color: green;
+            cursor: pointer;
+            display: inline-block;
+            font-family: CerebriSans-Regular, -apple-system, system-ui, Roboto, sans-serif;
+            padding: 7px 20px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 250ms;
+            border: 0;
+            font-size: 16px;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+        button:hover {
+            box-shadow: rgba(44, 187, 99, .35) 0 -25px 18px -14px inset, rgba(44, 187, 99, .25) 0 1px 2px, rgba(44, 187, 99, .25) 0 2px 4px, rgba(44, 187, 99, .25) 0 4px 8px, rgba(44, 187, 99, .25) 0 8px 16px, rgba(44, 187, 99, .25) 0 16px 32px;
+            transform: scale(1.05) rotate(-1deg);
+        }
+        #result {
+            text-align: center;
+            color: navajowhite;
+        }
+    </style>
+    <script>
+        const translations = {
+            en: {
+                title: "Nafaqa Calculation",
+                incomeLabel: "Monthly Income:",
+                childrenLabel: "Number of Children:",
+                wifeLabel: "Is the wife present?",
+                otherExpensesLabel: "Other Monthly Expenses:",
+                calculateButton: "Calculate Nafaqa",
+                resultText: "The monthly Nafaqa amount is:"
+            },
+            ar: {
+                title: "حساب النفقة الشرعية",
+                incomeLabel: "الدخل الشهري:",
+                childrenLabel: "عدد الأطفال:",
+                wifeLabel: "هل الزوجة موجودة؟",
+                otherExpensesLabel: "المصاريف الأخرى الشهرية:",
+                calculateButton: "احسب النفقة",
+                resultText: "مبلغ النفقة الشهرية المستحق هو:"
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const savedLanguage = localStorage.getItem('language') || 'ar';
+            applyLanguage(savedLanguage);
+        });
+
+        function applyLanguage(language) {
+            document.title = translations[language].title;
+            document.getElementById('title').textContent = translations[language].title;
+            document.getElementById('incomeLabel').textContent = translations[language].incomeLabel;
+            document.getElementById('childrenLabel').textContent = translations[language].childrenLabel;
+            document.getElementById('wifeLabel').textContent = translations[language].wifeLabel;
+            document.getElementById('otherExpensesLabel').textContent = translations[language].otherExpensesLabel;
+            document.getElementById('calculateButton').textContent = translations[language].calculateButton;
+
+            if (language === 'ar') {
+                document.body.dir = 'rtl';
+                document.body.style.fontFamily = 'Tahoma, sans-serif';
+            } else {
+                document.body.dir = 'ltr';
+                document.body.style.fontFamily = 'Arial, sans-serif';
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1 id="title">حساب النفقة الشرعية</h1>
+        <form id="nafaqaForm">
+            <label id="incomeLabel" for="income">الدخل الشهري:</label>
+            <input type="number" id="income" name="income" required>
+
+            <label id="childrenLabel" for="children">عدد الأطفال:</label>
+            <input type="number" id="children" name="children" required>
+
+            <label id="wifeLabel" for="wife">هل الزوجة موجودة؟</label>
+            <select id="wife" name="wife" required>
+                <option value="yes">نعم</option>
+                <option value="no">لا</option>
+            </select>
+
+            <label id="otherExpensesLabel" for="otherExpenses">المصاريف الأخرى الشهرية:</label>
+            <input type="number" id="otherExpenses" name="otherExpenses" required>
+
+            <button id="calculateButton" type="submit">احسب النفقة</button>
+        </form>
+        <div id="result"></div>
+    </div>
+    <script>
+        document.getElementById('nafaqaForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // الحصول على القيم المدخلة من المستخدم
+            const income = parseFloat(document.getElementById('income').value);
+            const numberOfChildren = parseInt(document.getElementById('children').value);
+            const wifePresent = document.getElementById('wife').value === 'yes';
+            const otherExpenses = parseFloat(document.getElementById('otherExpenses').value);
+
+            // حساب النفقة
+            const baseNafaqaPercentage = 0.25; // نسبة أساسية للنفقة من الدخل
+            let totalNafaqaPercentage = baseNafaqaPercentage + (wifePresent ? 0.05 : 0) + (0.05 * numberOfChildren);
+            let totalNafaqa = income * totalNafaqaPercentage - otherExpenses;
+
+            // عرض النتيجة
+            const savedLanguage = localStorage.getItem('language') || 'ar';
+            document.getElementById('result').textContent = `${translations[savedLanguage].resultText} ${totalNafaqa.toFixed(2)}`;
+        });
+    </script>
+</body>
+</html>

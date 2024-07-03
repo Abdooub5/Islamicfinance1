@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حساب زكاة العشر</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+            background-color: #f4f4f4;
+            padding: 20px;
+            background-image: url('/img2.jpg');
+        }
+
+        .container {
+            max-width: 400px;
+            margin-top: 0.1%;
+            background: #fff;
+            padding-block: 62%;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding-left: 10%;
+            padding-right: 10%;
+            background-image: url('/img2.jpg');
+        }
+
+        h1 {
+            margin-top: 20px;
+            color: navajowhite;
+            text-align: center;
+        }
+
+        label, p {
+            width: 100%;
+            margin-bottom: 15px;
+            color: navajowhite;
+        }
+        input, button {
+            width: 100%;
+            margin-bottom: 15px;
+            margin-top: 5%;
+        }
+
+        button {
+            --glow-color: white;
+            --glow-spread-color: green;
+            --enhanced-glow-color: darkgreen;
+            --btn-color: darkgreen;
+            
+            border: .25px solid var(--glow-color);
+            padding: 10px;
+            color: var(--glow-color);
+            font-size: 15px;
+            font-weight: bold;
+            background-color: var(--btn-color);
+            border-radius: 5em;
+            outline: none;
+            box-shadow: 0 0 1em .2em var(--glow-color),
+                        inset 0 0 .5em .5em var(--glow-color);
+            text-shadow: 0 0 .1em var(--glow-color);
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        input {
+            border-radius: 1em;
+            height: 35px;
+            margin-bottom: 20%;
+        }
+        p {
+            font-size: 25px;
+        }
+        h1 {
+            font-size: 25px;
+            margin-top: 50px;
+        }
+        select {
+            border-radius: 0.5em;
+            height: 40px;
+            margin-bottom: 20%;
+        }
+        label {
+            margin-top: 20px;
+        }
+
+        #result {
+            --glow-color: white;
+            --glow-spread-color: green;
+            --enhanced-glow-color: darkgreen;
+            --btn-color: navajowhite;
+            
+            border: .0001em solid var(--glow-color);
+            color: green;
+            font-size: 30px;
+            font-weight: bold;
+            background-color: var(--btn-color);
+            text-shadow: 0 0 .5em var(--glow-color);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="title">حساب زكاة العشر</h1>
+    <label for="totalAmount" id="totalAmountLabel">إجمالي قيمة المحصول أو المال:</label>
+    <input type="number" id="totalAmount" min="0" value="0">
+    <label for="irrigation" id="irrigationLabel">طريقة السقي:</label>
+    <select id="irrigation">
+        <option value="10">بدون تكاليف (مثل مياه الأمطار)</option>
+        <option value="5">بتكاليف (مثل الري الصناعي)</option>
+    </select>
+    <button onclick="calculateZakat()" id="calculateButton">احسب الزكاة</button>
+    <p id="result"></p>
+
+    <script>
+        const translations = {
+            en: {
+                title: "Calculate Ushr Zakat",
+                totalAmountLabel: "Total Amount of Crop or Money:",
+                irrigationLabel: "Irrigation Method:",
+                calculateButton: "Calculate Zakat",
+                resultText: "Total Zakat:"
+            },
+            ar: {
+                title: "حساب زكاة العشر",
+                totalAmountLabel: "إجمالي قيمة المحصول أو المال:",
+                irrigationLabel: "طريقة السقي:",
+                calculateButton: "احسب الزكاة",
+                resultText: "إجمالي الزكاة:"
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const savedLanguage = localStorage.getItem('language') || 'ar';
+            applyLanguage(savedLanguage);
+        });
+
+        function applyLanguage(language) {
+            document.title = translations[language].title;
+            document.getElementById('title').textContent = translations[language].title;
+            document.getElementById('totalAmountLabel').textContent = translations[language].totalAmountLabel;
+            document.getElementById('irrigationLabel').textContent = translations[language].irrigationLabel;
+            document.getElementById('calculateButton').textContent = translations[language].calculateButton;
+
+            if (language === 'ar') {
+                document.body.dir = 'rtl';
+                document.body.style.fontFamily = 'Tahoma, sans-serif';
+            } else {
+                document.body.dir = 'ltr';
+                document.body.style.fontFamily = 'Arial, sans-serif';
+            }
+        }
+
+        function calculateZakat() {
+            const totalAmount = document.getElementById('totalAmount').value;
+            const irrigation = document.getElementById('irrigation').value;
+            const zakatPercentage = irrigation / 100;
+            const zakatAmount = totalAmount * zakatPercentage;
+            const savedLanguage = localStorage.getItem('language') || 'ar';
+            document.getElementById('result').innerText = `${translations[savedLanguage].resultText} ${zakatAmount}`;
+        }
+    </script>
+</body>
+</html>

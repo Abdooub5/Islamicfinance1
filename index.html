@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تطبيق إسلامي</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-image: url('/img1.jpg');
+      background-size: cover;
+      background-position: center;
+      text-align: center;
+      
+    }
+
+    .menu-icon {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 30px;
+      cursor: pointer;
+      color: white;
+      z-index: 2;
+    }
+
+    .side-menu {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.9);
+      overflow-x: hidden;
+      transition: 0.5s;
+      padding-top: 60px;
+      color: white;
+      z-index: 1;
+      background-image: url('/img2.jpg');
+    }
+
+    .side-menu a {
+      padding: 10px 15px;
+      text-decoration: none;
+      font-size: 22px;
+      color: white;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .side-menu a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .side-menu .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      font-size: 36px;
+    }
+
+    .side-menu h1,
+    .side-menu p {
+      margin-left: 15px;
+      text-align: left;
+      font-style: italic;
+    }
+
+    .side-menu ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .side-menu ul li {
+      margin: 10px 0;
+    }
+
+
+
+    button {
+      display: block;
+      margin: 80px auto;
+      padding: 20px 50px;
+      --glow-color: white;
+      --glow-spread-color: green;
+      --enhanced-glow-color: green;
+      --btn-color: green;
+      border: .25em solid var(--glow-color);
+      color: var(--glow-color);
+      font-size: 23px;
+      font-weight: bold;
+      background-color: var(--btn-color);
+      border-radius: 4em;
+      
+      box-shadow: 0 0 1em .25em var(--glow-color),
+                  0 0 4em 1em var(--glow-spread-color),
+                  inset 0 0 .75em .25em var(--glow-color);
+      text-shadow: 0 0 .5em var(--glow-color);
+      position: relative;
+      transition: all 0.3s;
+    }
+
+    button::after {
+      pointer-events: none;
+      content: "";
+      position: absolute;
+      top: 120%;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: var(--glow-spread-color);
+      filter: blur(2em);
+      opacity: .7;
+      transform: perspective(1.5em) rotateX(35deg) scale(1, .6);
+    }
+
+    button:hover {
+      color: var(--btn-color);
+      background-color: var(--glow-color);
+      box-shadow: 0 0 1em .25em var(--glow-color),
+                  0 0 4em 2em var(--glow-spread-color),
+                  inset 0 0 .75em .25em var(--glow-color);
+    }
+
+    button:active {
+      box-shadow: 0 0 0.6em .25em var(--glow-color),
+                  0 0 2.5em 2em var(--glow-spread-color),
+                  inset 0 0 .5em .25em var(--glow-color);
+    }
+
+    #logo {
+      width: 50%;
+      margin: 0 auto;
+      border-radius: 1em;
+    }
+    h1{
+      color: navajowhite;
+      font-size: 25px;
+      margin-right: 40%;
+      font-size: italic;
+      
+      
+    }
+  </style>
+</head>
+
+<body>
+  <h1> islamic web</h1>
+  <div class="menu-icon" onclick="openMenu()">&#9776;</div>
+
+  <div class="side-menu" id="sideMenu">
+    <a href="javascript:void(0)" class="close-btn" onclick="closeMenu()">&times;</a>
+    <img src="/img.jpg" id="logo">
+    <h1 data-lang-key="title">التمويل الإسلامي</h1>
+    <p data-lang-key="description">تطبيق شامل لحساب الإرث، النفقة والزكاة وفقًا لأحكام الشريعة الإسلامية. يوفر أدوات دقيقة وسهلة الاستخدام لحساب التزاماتك المالية بمرونة واحترافية.</p>
+  <ul>
+  <li><a href="/index3.html" data-lang-key="settings">الإعدادات</a></li>
+  <li><a href="https://play.google.com/store/apps/details?id=com.eztg.muslim.islamic" data-lang-key="rateUs">قيمنا</a></li>
+ <li><a href="https://www.facebook.com/sharer/sharer.php?u=https://example.com" data-lang-key="share">شارك مع الأصدقاء</a></li>
+</ul>
+  </div>
+
+  <div class="main-content" id="mainContent">
+      <a href="/index1.html">
+        <button type="submit" id="irt" data-lang-key="irt">حساب الإرث</button>
+      </a>
+    </div>
+    <div>
+      <a href="/index4.html">
+        <button type="submit" id="zakah" data-lang-key="zakah">حساب الزكات</button>
+      </a>
+    </div>
+    <div>
+      <a href="/index2.html">
+        <button type="submit" id="nafa9a" data-lang-key="nafa9a">حساب النفقة</button>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const translations = {
+      en: {
+        title: "Islamic Finance",
+        description: "A comprehensive application for calculating inheritance, alimony, and zakat according to Islamic Sharia rules. It provides accurate and easy-to-use tools to calculate your financial obligations flexibly and professionally.",
+        settings: "Settings",
+        rateUs: "Rate Us",
+        share: "Share with Friends",
+        irt: "Calculate Inheritance",
+        zakah: "Calculate Zakat",
+        nafa9a: "Calculate Alimony"
+      },
+      ar: {
+        title: "التمويل الإسلامي",
+        description: "تطبيق شامل لحساب الإرث، النفقة والزكاة وفقًا لأحكام الشريعة الإسلامية. يوفر أدوات دقيقة وسهلة الاستخدام لحساب التزاماتك المالية بمرونة واحترافية.",
+        settings: "الإعدادات",
+        rateUs: "قيمنا",
+        share: "شارك مع الأصدقاء",
+        irt: "حساب الإرث",
+        zakah: "حساب الزكاة",
+        nafa9a: "حساب النفقة"
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+  const savedLanguage = localStorage.getItem('language') || 'ar';
+  applyLanguage(savedLanguage);
+
+  // إضافة مستمع للنقرة على زر الشارك
+  const shareButton = document.getElementById('shareButton');
+  shareButton.addEventListener('click', async () => {
+    try {
+      await navigator.share({
+        title: 'تطبيق التمويل الإسلامي',
+        text: 'تحقق من تطبيق التمويل الإسلامي لحساب الإرث، النفقة والزكاة وفقًا لأحكام الشريعة الإسلامية.',
+        url: 'https://example.com/islamic-finance-app',
+      });
+      console.log('تم مشاركة المحتوى بنجاح');
+    } catch (error) {
+      console.error('حدث خطأ أثناء مشاركة المحتوى:', error.message);
+    }
+  });
+});
+
+    function openMenu() {
+      document.getElementById("sideMenu").style.width = "50%";
+      document.getElementById("mainContent").classList.add("");
+    }
+
+    function closeMenu() {
+      document.getElementById("sideMenu").style.width = "0";
+      document.getElementById("mainContent").classList.remove("blur");
+    }
+
+    function applyLanguage(language) {
+      const elementsToTranslate = document.querySelectorAll('[data-lang-key]');
+      elementsToTranslate.forEach(element => {
+        const key = element.getAttribute('data-lang-key');
+        element.textContent = translations[language][key];
+      });
+
+      if (language === 'ar') {
+        document.body.dir = 'rtl';
+        document.body.style.fontFamily = 'Tahoma, sans-serif';
+      } else {
+        document.body.dir = 'ltr';
+        document.body.style.fontFamily = 'Arial, sans-serif';
+      }
+
+      localStorage.setItem('language', language);
+    }
+  </script>
+</body>
+
+</html>

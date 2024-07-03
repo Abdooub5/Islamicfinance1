@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إختر الورثة</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('/img2.jpg');
+        }
+        
+        h1 {
+            color: navajowhite;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            background-image: url('/img2.jpg');
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            color: navajowhite;
+        }
+
+        li {
+            margin: 10px 0;
+            color: navajowhite;
+        }
+
+        input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .button-33 {
+            background-color: #c2fbd7;
+            border-radius: 100px;
+            box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset, rgba(44, 187, 99, .15) 0 1px 2px, rgba(44, 187, 99, .15) 0 2px 4px, rgba(44, 187, 99, .15) 0 4px 8px, rgba(44, 187, 99, .15) 0 8px 16px, rgba(44, 187, 99, .15) 0 16px 32px;
+            color: green;
+            cursor: pointer;
+            display: inline-block;
+            font-family: CerebriSans-Regular, -apple-system, system-ui, Roboto, sans-serif;
+            padding: 7px 20px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 250ms;
+            border: 0;
+            font-size: 16px;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        .button-33:hover {
+            box-shadow: rgba(44, 187, 99, .35) 0 -25px 18px -14px inset, rgba(44, 187, 99, .25) 0 1px 2px, rgba(44, 187, 99, .25) 0 2px 4px, rgba(44, 187, 99, .25) 0 4px 8px, rgba(44, 187, 99, .25) 0 8px 16px, rgba(44, 187, 99, .25) 0 16px 32px;
+            transform: scale(1.05) rotate(-1deg);
+        }
+
+        #resultList {
+            text-align: left;
+        }
+
+        .language-selector {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        .language-selector button {
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="language-selector">
+        <button onclick="setLanguage('ar')">العربية</button>
+        <button onclick="setLanguage('en')">English</button>
+    </div>
+
+    <div class="container">
+        <h1 id="inheritanceTitle">إختر الوراثة</h1>
+        <ul id="itemList">
+            <!-- Items will be added here by JavaScript -->
+        </ul>
+        <input type="number" id="totalMoney" placeholder="المرجو ادخال قيمة الإرث" />
+        <button class="button-33" id="calculateButton">احسب الارث</button>
+        <ul id="resultList"></ul>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                inheritanceTitle: "Select Heirs",
+                totalMoneyPlaceholder: "Please enter the inheritance amount",
+                calculateButton: "Calculate Inheritance"
+            },
+            ar: {
+                inheritanceTitle: "إختر الوراثة",
+                totalMoneyPlaceholder: "المرجو ادخال قيمة الإرث",
+                calculateButton: "احسب الارث"
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLanguage = localStorage.getItem('language') || 'ar';
+            applyLanguage(savedLanguage);
+
+            const itemList = document.getElementById('itemList');
+            const items = [
+                'الأم',
+                'الإبن',
+                'الإبنت',
+                'الزوجة',
+                'الاب',
+                'العم',
+                'العمت',
+                'الزوج',
+                'الخال',
+                'الخالة'
+            ];
+
+            items.forEach((item, index) => {
+                const listItem = document.createElement('li');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = 'item' + (index + 1);
+                checkbox.value = item;
+
+                const label = document.createElement('label');
+                label.htmlFor = 'item' + (index + 1);
+                label.textContent = item;
+
+                listItem.appendChild(checkbox);
+                listItem.appendChild(label);
+                itemList.appendChild(listItem);
+            });
+
+            const calculateButton = document.getElementById('calculateButton');
+            calculateButton.addEventListener('click', calculateInheritance);
+        });
+
+        function applyLanguage(language) {
+            document.title = language === 'ar' ? 'إختر الورثة' : 'Select Heirs';
+            document.getElementById('inheritanceTitle').textContent = translations[language].inheritanceTitle;
+            document.getElementById('totalMoney').placeholder = translations[language].totalMoneyPlaceholder;
+            document.getElementById('calculateButton').textContent = translations[language].calculateButton;
+
+            if (language === 'ar') {
+                document.body.dir = 'rtl';
+                document.body.style.fontFamily = 'Tahoma, sans-serif';
+            } else {
+                document.body.dir = 'ltr';
+                document.body.style.fontFamily = 'Arial, sans-serif';
+            }
+        }
+
+        function setLanguage(language) {
+            localStorage.setItem('language', language);
+            applyLanguage(language);
+        }
+
+        function calculateInheritance() {
+            const inheritanceShares = {
+                'الأم': 1 / 6,
+                'الإبن': 1 / 2,
+                'الإبنت': 1 / 4,
+                'الزوجة': 1 / 8,
+                'الاب': 1 / 6,
+                'العم': 0,
+                'العمت': 0,
+                'الزوج': 1 / 4,
+                'الخال': 0,
+                'الخالة': 0
+            };
+
+            const itemList = document.getElementById('itemList');
+            const selectedItems = [];
+            itemList.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+                selectedItems.push(checkbox.value);
+            });
+
+            const totalMoneyInput = document.getElementById('totalMoney');
+            const totalMoney = parseFloat(totalMoneyInput.value);
+            const resultList = document.getElementById('resultList');
+
+            if (isNaN(totalMoney) || totalMoney <= 0) {
+                resultList.innerHTML = '<li>Veuillez entrer une somme valide.</li>';
+                return;
+            }
+
+            resultList.innerHTML = '';
+            selectedItems.forEach(item => {
+                const share = inheritanceShares[item];
+                if (share > 0) {
+                    const amount = totalMoney * share;
+                    const resultItem = document.createElement('li');
+                    resultItem.textContent = `${item}: ${amount.toFixed(2)}`;
+                    resultList.appendChild(resultItem);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

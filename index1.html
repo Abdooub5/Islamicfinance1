@@ -26,7 +26,6 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             text-align: center;
-            background-image: url('img2.jpg');
         }
 
         ul {
@@ -96,35 +95,28 @@
     </div>
 
     <div class="container">
-        <h1 id="inheritanceTitle">إختر الوراثة</h1>
+        <h1 id="inheritanceTitle">إختر الورثة</h1>
         <ul id="itemList">
             <!-- Items will be added here by JavaScript -->
         </ul>
         <input type="number" id="totalMoney" placeholder="المرجو ادخال قيمة الإرث" />
         <button class="button-33" id="calculateButton">احسب الارث</button>
         <ul id="resultList"></ul>
-	     <script type="text/javascript">
-	atOptions = {
-		'key' : '7613c4c818be3058c5f405c7adfed217',
-		'format' : 'iframe',
-		'height' : 300,
-		'width' : 160,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//www.topcreativeformat.com/7613c4c818be3058c5f405c7adfed217/invoke.js"></script>
     </div>
-	<script>
+
+    <script>
         const translations = {
             en: {
                 inheritanceTitle: "Select Heirs",
                 totalMoneyPlaceholder: "Please enter the inheritance amount",
-                calculateButton: "Calculate Inheritance"
+                calculateButton: "Calculate Inheritance",
+                invalidAmount: "Please enter a valid amount."
             },
             ar: {
-                inheritanceTitle: "إختر الوراثة",
+                inheritanceTitle: "إختر الورثة",
                 totalMoneyPlaceholder: "المرجو ادخال قيمة الإرث",
-                calculateButton: "احسب الارث"
+                calculateButton: "احسب الارث",
+                invalidAmount: "الرجاء إدخال مبلغ صالح."
             }
         };
 
@@ -167,7 +159,7 @@
         });
 
         function applyLanguage(language) {
-            document.title = language === 'ar' ? 'إختر الورثة' : 'Select Heirs';
+            document.title = translations[language].inheritanceTitle;
             document.getElementById('inheritanceTitle').textContent = translations[language].inheritanceTitle;
             document.getElementById('totalMoney').placeholder = translations[language].totalMoneyPlaceholder;
             document.getElementById('calculateButton').textContent = translations[language].calculateButton;
@@ -211,7 +203,7 @@
             const resultList = document.getElementById('resultList');
 
             if (isNaN(totalMoney) || totalMoney <= 0) {
-                resultList.innerHTML = '<li>Veuillez entrer une somme valide.</li>';
+                resultList.innerHTML = `<li>${translations[localStorage.getItem('language')].invalidAmount}</li>`;
                 return;
             }
 

@@ -167,7 +167,7 @@
         function calculateZakat() {
             const totalAmount = document.getElementById('totalAmount').value;
             const irrigation = document.getElementById('irrigation').value;
-            const zakatPercentage = irrigation / 100;
+            const zakatPercentage = irrigation / 400;
             const zakatAmount = totalAmount * zakatPercentage;
             const savedLanguage = localStorage.getItem('language') || 'ar';
             document.getElementById('result').innerText = `${translations[savedLanguage].resultText} ${zakatAmount}`;

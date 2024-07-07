@@ -13,7 +13,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-image: url('img2.jpg');
+            background-image: url('/img2.jpg');
         }
         
         h1 {
@@ -21,11 +21,12 @@
         }
 
         .container {
-            background-image: url('img2.jpg');
+            background: #fff;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             text-align: center;
+            background-image: url('/img2.jpg');
         }
 
         ul {
@@ -78,17 +79,23 @@
 
         .language-selector {
             position: absolute;
-            top: 10px;
-            left: 10px;
+            top: 40px;
+            left: 0px;
+            border-radius:30em;
+            background-color: greenyellow;
+            padding-bottom: 10%;
         }
 
         .language-selector button {
             margin: 0 5px;
+            margin-top: 35px;
+            border-radius: 2em;
+            background-color: navajowhite;
+            color: green;
         }
     </style>
 </head>
 <body>
-    
     <div class="language-selector">
         <button onclick="setLanguage('ar')">العربية</button>
         <button onclick="setLanguage('en')">English</button>
@@ -119,14 +126,12 @@
             en: {
                 inheritanceTitle: "Select Heirs",
                 totalMoneyPlaceholder: "Please enter the inheritance amount",
-                calculateButton: "Calculate Inheritance",
-                invalidAmount: "Please enter a valid amount."
+                calculateButton: "Calculate Inheritance"
             },
             ar: {
-                inheritanceTitle: "إختر الورثة",
+                inheritanceTitle: "إختر الوراثة",
                 totalMoneyPlaceholder: "المرجو ادخال قيمة الإرث",
-                calculateButton: "احسب الارث",
-                invalidAmount: "الرجاء إدخال مبلغ صالح."
+                calculateButton: "احسب الارث"
             }
         };
 
@@ -136,16 +141,20 @@
 
             const itemList = document.getElementById('itemList');
             const items = [
+                'الأب',
                 'الأم',
                 'الإبن',
-                'الإبنت',
-                'الزوجة',
-                'الاب',
-                'العم',
-                'العمت',
+                'الإبنة',
                 'الزوج',
-                'الخال',
-                'الخالة'
+                'الزوجة',
+                'الأخ الشقيق',
+                'الأخت الشقيقة',
+                'الأخ لأب',
+                'الأخت لأب',
+                'الأخ لأم',
+                'الأخت لأم',
+                'الجد',
+                'الجدة'
             ];
 
             items.forEach((item, index) => {
@@ -169,7 +178,7 @@
         });
 
         function applyLanguage(language) {
-            document.title = translations[language].inheritanceTitle;
+            document.title = language === 'ar' ? 'إختر الورثة' : 'Select Heirs';
             document.getElementById('inheritanceTitle').textContent = translations[language].inheritanceTitle;
             document.getElementById('totalMoney').placeholder = translations[language].totalMoneyPlaceholder;
             document.getElementById('calculateButton').textContent = translations[language].calculateButton;
@@ -190,16 +199,20 @@
 
         function calculateInheritance() {
             const inheritanceShares = {
+                'الأب': 1 / 6,
                 'الأم': 1 / 6,
                 'الإبن': 1 / 2,
-                'الإبنت': 1 / 4,
-                'الزوجة': 1 / 8,
-                'الاب': 1 / 6,
-                'العم': 0,
-                'العمت': 0,
+                'الإبنة': 1 / 2,
                 'الزوج': 1 / 4,
-                'الخال': 0,
-                'الخالة': 0
+                'الزوجة': 1 / 8,
+                'الأخ الشقيق': 0,
+                'الأخت الشقيقة': 0,
+                'الأخ لأب': 0,
+                'الأخت لأب': 0,
+                'الأخ لأم': 0,
+                'الأخت لأم': 0,
+                'الجد': 0,
+                'الجدة': 0
             };
 
             const itemList = document.getElementById('itemList');
@@ -213,7 +226,7 @@
             const resultList = document.getElementById('resultList');
 
             if (isNaN(totalMoney) || totalMoney <= 0) {
-                resultList.innerHTML = `<li>${translations[localStorage.getItem('language')].invalidAmount}</li>`;
+                resultList.innerHTML = '<li>المرجو إدخال مبلغ صحيح.</li>';
                 return;
             }
 

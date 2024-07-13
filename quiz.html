@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار إسلامي</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #212121;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00ff00;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .quiz {
+            background: linear-gradient(#212121, #212121) padding-box,
+                        linear-gradient(145deg, transparent 35%,#00ff00, #40c9ff) border-box;
+            border: 2px solid transparent;
+            padding: 32px 24px;
+            font-size: 14px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-sizing: border-box;
+            border-radius: 16px;
+            background-size: 200% 100%;
+            animation: gradient 5s ease infinite;
+            text-align: center;
+        }
+
+        .quiz h1 {
+            font-size: 24px;
+        }
+
+        .quiz p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .options button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #414141;
+            background-color: transparent;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .options button:hover {
+            background-color: #414141;
+        }
+
+        #next-btn, #prev-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #414141;
+            background-color: #313131;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+            align-self: center;
+        }
+
+        #next-btn:hover, #prev-btn:hover {
+            background-color: #fff;
+            color: #313131;
+        }
+
+        .correct-answer {
+            color: #00ff00;
+            margin-top: 10px;
+        }
+
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #717171;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">اختبار إسلامي</div>
+    </header>
+
+    <main>
+        <section class="quiz">
+            <h1 id="quiz-title">السؤال 1</h1>
+            <p id="question">ما هو الركن الأول من أركان الإسلام؟</p>
+            <div class="options">
+                <button class="option" onclick="checkAnswer(this, false, 'الشهادتان')">الصلاة</button>
+                <button class="option" onclick="checkAnswer(this, true, 'الشهادتان')">الشهادتان</button>
+                <button class="option" onclick="checkAnswer(this, false, 'الشهادتان')">الزكاة</button>
+            </div>
+            <p id="correct-answer" class="correct-answer" style="display: none;"></p>
+            <div class="navigation-buttons">
+                <button id="prev-btn" onclick="loadPrevQuiz()" style="display: none;">السؤال السابق</button>
+                <button id="next-btn" onclick="loadNextQuiz()" style="display: none;">السؤال التالي</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2024 موقع الاختبارات الإسلامية. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script>
+        let currentQuiz = 0;
+
+        const quizzes = [
+            {
+                title: 'السؤال 1',
+                question: 'ما هو الركن الأول من أركان الإسلام؟',
+                options: [
+                    { text: 'الصلاة', correct: false },
+                    { text: 'الشهادتان', correct: true },
+                    { text: 'الزكاة', correct: false }
+                ]
+            },
+            {
+                title: 'السؤال 2',
+                question: 'ما هو الركن الثاني من أركان الإسلام؟',
+                options: [
+                    { text: 'الصوم', correct: false },
+                    { text: 'الصلاة', correct: true },
+                    { text: 'الحج', correct: false }
+                ]
+            },
+            {
+                title: 'السؤال 3',
+                question: 'ما هي أول سورة في القرآن الكريم؟',
+                options: [
+                    { text: 'سورة الفاتحة', correct: true },
+                    { text: 'سورة البقرة', correct: false },
+                    { text: 'سورة الإخلاص', correct: false }
+                ]
+            },
+            {
+                title: 'السؤال 4',
+                question: 'ما هو اسم والدة النبي محمد صلى الله عليه وسلم؟',
+                options: [
+                    { text: 'آمنة بنت وهب', correct: true },
+                    { text: 'خديجة بنت خويلد', correct: false },
+                    { text: 'عائشة بنت أبي بكر', correct: false }
+                ]
+            },
+            {
+                title: 'السؤال 5',
+                question: 'في أي عام ولد النبي محمد صلى الله عليه وسلم؟',
+                options: [
+                    { text: '570 م', correct: true },
+                    { text: '610 م', correct: false },
+                    { text: '580 م', correct: false }
+                ]
+            },
+            {
+    title: 'السؤال 6',
+    question: 'كم عدد ركعات صلاة الفجر؟',
+    options: [
+        { text: '2 ركعات', correct: true },
+        { text: '4 ركعات', correct: false },
+        { text: '3 ركعات', correct: false }
+    ]
+},
+{
+    title: 'السؤال 7',
+    question: 'ما هو اسم الغار الذي كان يتعبد فيه النبي محمد صلى الله عليه وسلم قبل البعثة؟',
+    options: [
+        { text: 'غار ثور', correct: false },
+        { text: 'غار حراء', correct: true },
+        { text: 'غار أحد', correct: false }
+    ]
+},
+{
+    title: 'السؤال 8',
+    question: 'ما هو المسجد الذي أسرى إليه النبي محمد صلى الله عليه وسلم؟',
+    options: [
+        { text: 'المسجد الحرام', correct: false },
+        { text: 'المسجد الأقصى', correct: true },
+        { text: 'مسجد قباء', correct: false }
+    ]
+},
+{
+    title: 'السؤال 9',
+    question: 'ما هو الشهر الذي يصوم فيه المسلمون؟',
+    options: [
+        { text: 'شهر رمضان', correct: true },
+        { text: 'شهر شوال', correct: false },
+        { text: 'شهر رجب', correct: false }
+    ]
+},
+{
+    title: 'السؤال 10',
+    question: 'ما هو اسم السورة التي تذكر فيها أحكام الصيام؟',
+    options: [
+        { text: 'سورة البقرة', correct: true },
+        { text: 'سورة النساء', correct: false },
+        { text: 'سورة المائدة', correct: false }
+    ]
+},
+{
+    title: 'السؤال 11',
+    question: 'من هو أول خليفة للمسلمين بعد وفاة النبي محمد صلى الله عليه وسلم؟',
+    options: [
+        { text: 'عمر بن الخطاب', correct: false },
+        { text: 'أبو بكر الصديق', correct: true },
+        { text: 'عثمان بن عفان', correct: false }
+    ]
+},
+{
+    title: 'السؤال 12',
+    question: 'ما هو القرآن الكريم؟',
+    options: [
+        { text: 'كتاب المسلمين المقدس', correct: true },
+        { text: 'كتاب اليهود المقدس', correct: false },
+        { text: 'كتاب المسيحيين المقدس', correct: false }
+    ]
+},
+{
+    title: 'السؤال 13',
+    question: 'ما هي القبلة التي يتجه نحوها المسلمون في صلاتهم؟',
+    options: [
+        { text: 'القدس', correct: false },
+        { text: 'الكعبة', correct: true },
+        { text: 'المدينة المنورة', correct: false }
+    ]
+},
+{
+    title: 'السؤال 14',
+    question: 'من هو النبي الذي التقى به موسى عليه السلام لتعلم العلم والحكمة؟',
+    options: [
+        { text: 'يوسف عليه السلام', correct: false },
+        { text: 'إبراهيم عليه السلام', correct: false },
+        { text: 'الخضر عليه السلام', correct: true }
+    ]
+},
+{
+    title: 'السؤال 15',
+    question: 'كم عدد سور القرآن الكريم؟',
+    options: [
+        { text: '114', correct: true },
+        { text: '110', correct: false },
+        { text: '120', correct: false }
+    ]
+},
+{
+    title: 'السؤال 16',
+    question: 'ما هي أطول سورة في القرآن الكريم؟',
+    options: [
+        { text: 'سورة النساء', correct: false },
+        { text: 'سورة البقرة', correct: true },
+        { text: 'سورة آل عمران', correct: false }
+    ]
+},
+{
+    title: 'السؤال 17',
+    question: 'من هو الصحابي الذي لقب بسيف الله المسلول؟',
+    options: [
+        { text: 'علي بن أبي طالب', correct: false },
+        { text: 'خالد بن الوليد', correct: true },
+        { text: 'عمر بن الخطاب', correct: false }
+    ]
+},
+{
+    title: 'السؤال 18',
+    question: 'ما هو أول مسجد بني في الإسلام؟',
+    options: [
+        { text: 'المسجد الحرام', correct: false },
+        { text: 'مسجد قباء', correct: true },
+        { text: 'المسجد الأقصى', correct: false }
+    ]
+},
+{
+    title: 'السؤال 19',
+    question: 'ما هو اسم المعركة التي انتصر فيها المسلمون بقيادة النبي محمد صلى الله عليه وسلم على قريش في السنة الثانية للهجرة؟',
+    options: [
+        { text: 'معركة بدر', correct: true },
+        { text: 'معركة أحد', correct: false },
+        { text: 'معركة الخندق', correct: false }
+    ]
+},
+{
+    title: 'السؤال 20',
+    question: 'ما هي الليلة التي أنزل فيها القرآن الكريم؟',
+    options: [
+        { text: 'ليلة النصف من شعبان', correct: false },
+        { text: 'ليلة القدر', correct: true },
+        { text: 'ليلة الإسراء والمعراج', correct: false }
+    ]
+},
+{
+    title: 'السؤال 21',
+    question: 'من هو النبي الذي أرسل إلى قوم عاد؟',
+    options: [
+        { text: 'نبي الله صالح', correct: false },
+        { text: 'نبي الله هود', correct: true },
+        { text: 'نبي الله شعيب', correct: false }
+    ]
+},
+{
+    title: 'السؤال 22',
+    question: 'ما هو الاسم الآخر لسورة محمد؟',
+    options: [
+        { text: 'سورة النصر', correct: false },
+        { text: 'سورة القتال', correct: true },
+        { text: 'سورة الفتح', correct: false }
+    ]
+},
+{
+    title: 'السؤال 23',
+    question: 'من هو النبي الذي ابتلعه الحوت؟',
+    options: [
+        { text: 'نبي الله موسى', correct: false },
+        { text: 'نبي الله يونس', correct: true },
+        { text: 'نبي الله يوسف', correct: false }
+    ]
+},
+{
+    title: 'السؤال 24',
+    question: 'ما هو اسم أم إسماعيل عليه السلام؟',
+    options: [
+        { text: 'هاجر', correct: true },
+        { text: 'سارة', correct: false },
+        { text: 'مريم', correct: false }
+    ]
+},
+{
+    title: 'السؤال 25',
+    question: 'ما هو عدد أركان الإسلام؟',
+    options: [
+        { text: 'ثلاثة', correct: false },
+        { text: 'أربعة', correct: false },
+        { text: 'خمسة', correct: true }
+    ]
+},
+{
+    title: 'السؤال 26',
+    question: 'ما هو الشهر الهجري الذي يأتي بعد شهر رمضان؟',
+    options: [
+        { text: 'شهر شوال', correct: true },
+        { text: 'شهر ذو القعدة', correct: false },
+        { text: 'شهر شعبان', correct: false }
+    ]
+},
+{
+    title: 'السؤال 27',
+    question: 'من هو أول نبي دعا لعبادة الله؟',
+    options: [
+        { text: 'نبي الله نوح', correct: true },
+        { text: 'نبي الله إبراهيم', correct: false },
+        { text: 'نبي الله آدم', correct: false }
+    ]
+},
+{
+    title: 'السؤال 28',
+    question: 'ما هي المدينة التي هاجر إليها النبي محمد صلى الله عليه وسلم؟',
+    options: [
+        { text: 'مكة', correct: false },
+        { text: 'المدينة المنورة', correct: true },
+        { text: 'الطائف', correct: false }
+    ]
+},
+{
+    title: 'السؤال 29',
+    question: 'ما هو اسم جبل عرفات؟',
+    options: [
+        { text: 'جبل النور', correct: false },
+        { text: 'جبل الرحمة', correct: true },
+        { text: 'جبل أحد', correct: false }
+    ]
+},
+{
+    title: 'السؤال 30',
+    question: 'ما هو عدد الأشهر الحرم في الإسلام؟',
+    options: [
+        { text: 'ثلاثة أشهر', correct: false },
+        { text: 'أربعة أشهر', correct: true },
+        { text: 'خمسة أشهر', correct: false }
+    ]
+},
+{
+    title: 'السؤال 31',
+    question: 'ما هو الكتاب الذي أنزل على النبي موسى عليه السلام؟',
+    options: [
+        { text: 'الزبور', correct: false },
+        { text: 'الإنجيل', correct: false },
+        { text: 'التوراة', correct: true }
+    ]
+},
+{
+    title: 'السؤال 32',
+    question: 'ما هو الحجر الذي أقام عليه إبراهيم عليه السلام لبناء الكعبة؟',
+    options: [
+        { text: 'الحجر الأسود', correct: false },
+        { text: 'حجر إسماعيل', correct: false },
+        { text: 'مقام إبراهيم', correct: true }
+    ]
+},
+{
+    title: 'السؤال 33',
+    question: 'ما هو اسم السورة التي تذكر فيها غزوة أحد؟',
+    options: [
+        { text: 'سورة الأنفال', correct: false },
+        { text: 'سورة آل عمران', correct: true },
+        { text: 'سورة التوبة', correct: false }
+    ]
+},
+{
+    title: 'السؤال 34',
+    question: 'ما هو اسم السورة التي تعرف باسم "قلب القرآن"؟',
+    options: [
+        { text: 'سورة الرحمن', correct: false },
+        { text: 'سورة يس', correct: true },
+        { text: 'سورة الملك', correct: false }
+    ]
+},
+{
+    title: 'السؤال 35',
+    question: 'ما هو الاسم الذي أطلق على العام الذي ولد فيه النبي محمد صلى الله عليه وسلم؟',
+    options: [
+        { text: 'عام الحزن', correct: false },
+        { text: 'عام الفيل', correct: true },
+        { text: 'عام الفتح', correct: false }
+    ]
+},
+{
+    title: 'السؤال 36',
+    question: 'ما هو اسم السورة التي نزلت كاملة مرة واحدة؟',
+    options: [
+        { text: 'سورة البقرة', correct: false },
+        { text: 'سورة الفاتحة', correct: false },
+        { text: 'سورة الأنعام', correct: true }
+    ]
+},
+{
+    title: 'السؤال 37',
+    question: 'من هو النبي الذي ولد بدون أب؟',
+    options: [
+        { text: 'نبي الله عيسى', correct: true },
+        { text: 'نبي الله موسى', correct: false },
+        { text: 'نبي الله يوسف', correct: false }
+    ]
+},
+{
+    title: 'السؤال 38',
+    question: 'ما هو الاسم الآخر لسورة الكهف؟',
+    options: [
+        { text: 'سورة النور', correct: false },
+        { text: 'سورة الفرقان', correct: false },
+        { text: 'سورة الحصن', correct: true }
+    ]
+},
+{
+    title: 'السؤال 39',
+    question: 'ما هو الاسم الحقيقي لأبي بكر الصديق؟',
+    options: [
+        { text: 'عبد الله بن أبي قحافة', correct: true },
+        { text: 'عمر بن الخطاب', correct: false },
+        { text: 'عثمان بن عفان', correct: false }
+    ]
+},
+{
+    title: 'السؤال 40',
+    question: 'ما هو الحيوان الذي تكلم في القرآن الكريم؟',
+    options: [
+        { text: 'الحمار', correct: false },
+        { text: 'الهدهد', correct: true },
+        { text: 'الكلب', correct: false }
+    ]
+},
+{
+    title: 'السؤال 41',
+    question: 'من هو النبي الذي كان يسمى "إسرائيل"؟',
+    options: [
+        { text: 'نبي الله يعقوب', correct: true },
+        { text: 'نبي الله إسحاق', correct: false },
+        { text: 'نبي الله يوسف', correct: false }
+    ]
+},
+{
+    title: 'السؤال 42',
+    question: 'ما هو اسم المسجد الذي أسري بالنبي محمد صلى الله عليه وسلم إليه؟',
+    options: [
+        { text: 'المسجد الحرام', correct: false },
+        { text: 'المسجد النبوي', correct: false },
+        { text: 'المسجد الأقصى', correct: true }
+    ]
+},
+{
+    title: 'السؤال 43',
+    question: 'كم مرة ذكرت كلمة "الحج" في القرآن الكريم؟',
+    options: [
+        { text: 'مرة واحدة', correct: false },
+        { text: 'مرتين', correct: false },
+        { text: 'ثلاث مرات', correct: true }
+    ]
+},
+{
+    title: 'السؤال 44',
+    question: 'ما هو اسم والد النبي محمد صلى الله عليه وسلم؟',
+    options: [
+        { text: 'عبد الله بن عبد المطلب', correct: true },
+        { text: 'عبد المطلب بن هاشم', correct: false },
+        { text: 'أبو طالب بن عبد المطلب', correct: false }
+    ]
+},
+{
+    title: 'السؤال 45',
+    question: 'من هو الصحابي الذي أذن في المسجد الحرام بعد فتح مكة؟',
+    options: [
+        { text: 'عبد الله بن مسعود', correct: false },
+        { text: 'بلال بن رباح', correct: true },
+        { text: 'أبو هريرة', correct: false }
+    ]
+},
+{
+    title: 'السؤال 46',
+    question: 'ما هو الكتاب الذي أنزل على النبي داود عليه السلام؟',
+    options: [
+        { text: 'الإنجيل', correct: false },
+        { text: 'التوراة', correct: false },
+        { text: 'الزبور', correct: true }
+    ]
+},
+{
+    title: 'السؤال 47',
+    question: 'كم عدد السور التي تبدأ بحروف مقطعة في القرآن الكريم؟',
+    options: [
+        { text: '29 سورة', correct: true },
+        { text: '28 سورة', correct: false },
+        { text: '30 سورة', correct: false }
+    ]
+},
+{
+    title: 'السؤال 48',
+    question: 'من هو النبي الذي صنع الفلك بأمر من الله؟',
+    options: [
+        { text: 'نبي الله إبراهيم', correct: false },
+        { text: 'نبي الله نوح', correct: true },
+        { text: 'نبي الله موسى', correct: false }
+    ]
+},
+{
+    title: 'السؤال 49',
+    question: 'ما هي السورة التي وردت فيها آية الكرسي؟',
+    options: [
+        { text: 'سورة النساء', correct: false },
+        { text: 'سورة البقرة', correct: true },
+        { text: 'سورة آل عمران', correct: false }
+    ]
+},
+{
+    title: 'السؤال 50',
+    question: 'ما هو اسم الصحابي الذي نام في فراش النبي محمد صلى الله عليه وسلم ليلة الهجرة؟',
+    options: [
+        { text: 'علي بن أبي طالب', correct: true },
+        { text: 'عبد الله بن مسعود', correct: false },
+        { text: 'عمر بن الخطاب', correct: false }
+    ]
+},
+{
+    title: 'السؤال 51',
+    question: 'ما هي أول آية نزلت على النبي محمد صلى الله عليه وسلم؟',
+    options: [
+        { text: 'اقرأ باسم ربك الذي خلق', correct: true },
+        { text: 'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ', correct: false },
+        { text: 'يَا أَيُّهَا الَّذِينَ آمَنُوا', correct: false }
+    ]
+},
+{
+    title: 'السؤال 52',
+    question: 'من هو النبي الذي أرسل إلى قوم ثمود؟',
+    options: [
+        { text: 'نبي الله صالح', correct: true },
+        { text: 'نبي الله هود', correct: false },
+        { text: 'نبي الله شعيب', correct: false }
+    ]
+},
+{
+    title: 'السؤال 53',
+    question: 'ما هي السورة التي تسمى بـ "عروس القرآن"؟',
+    options: [
+        { text: 'سورة الرحمن', correct: true },
+        { text: 'سورة الفاتحة', correct: false },
+        { text: 'سورة البقرة', correct: false }
+    ]
+},
+{
+    title: 'السؤال 54',
+    question: 'كم عدد السور المكية في القرآن الكريم؟',
+    options: [
+        { text: '86 سورة', correct: true },
+        { text: '28 سورة', correct: false },
+        { text: '114 سورة', correct: false }
+    ]
+},
+{
+    title: 'السؤال 55',
+    question: 'ما هو المكان الذي اتخذه الرسول صلى الله عليه وسلم مركزاً سرياً للدعوة في مكة؟',
+    options: [
+        { text: 'دار الأرقم', correct: true },
+        { text: 'غار حراء', correct: false },
+        { text: 'الكعبة', correct: false }
+    ]
+},
+{
+    title: 'السؤال 56',
+    question: 'من هو الصحابي الذي أشار بحفر الخندق في غزوة الأحزاب؟',
+    options: [
+        { text: 'سلمان الفارسي', correct: true },
+        { text: 'عمر بن الخطاب', correct: false },
+        { text: 'أبو بكر الصديق', correct: false }
+    ]
+},
+{
+    title: 'السؤال 57',
+    question: 'ما هو عدد المرات التي ورد فيها ذكر "النار" في القرآن الكريم؟',
+    options: [
+        { text: '126 مرة', correct: true },
+        { text: '104 مرات', correct: false },
+        { text: '85 مرة', correct: false }
+    ]
+},
+{
+    title: 'السؤال 58',
+    question: 'ما هي السورة التي تسمى بـ "السابعة المثاني"؟',
+    options: [
+        { text: 'سورة الفاتحة', correct: true },
+        { text: 'سورة الكهف', correct: false },
+        { text: 'سورة الإسراء', correct: false }
+    ]
+},
+{
+    title: 'السؤال 59',
+    question: 'ما هو اسم النبي الذي كفله زكريا عليه السلام؟',
+    options: [
+        { text: 'نبي الله يحيى', correct: false },
+        { text: 'نبي الله عيسى', correct: true },
+        { text: 'نبي الله موسى', correct: false }
+    ]
+},
+{
+    title: 'السؤال 60',
+    question: 'ما هي السورة التي تسمى بـ "الفاضحة"؟',
+    options: [
+        { text: 'سورة التوبة', correct: true },
+        { text: 'سورة النساء', correct: false },
+        { text: 'سورة الأنفال', correct: false }
+    ]
+},
+{
+    title: 'السؤال 61',
+    question: 'من هو أول من جمع القرآن الكريم في مصحف واحد؟',
+    options: [
+        { text: 'أبو بكر الصديق', correct: true },
+        { text: 'عمر بن الخطاب', correct: false },
+        { text: 'عثمان بن عفان', correct: false }
+    ]
+},
+{
+    title: 'السؤال 62',
+    question: 'كم مرة ورد ذكر "موسى" في القرآن الكريم؟',
+    options: [
+        { text: '136 مرة', correct: true },
+        { text: '124 مرة', correct: false },
+        { text: '110 مرات', correct: false }
+    ]
+},
+{
+    title: 'السؤال 63',
+    question: 'ما هي السورة التي تسمى بـ "القارعة"؟',
+    options: [
+        { text: 'سورة القارعة', correct: true },
+        { text: 'سورة الزلزلة', correct: false },
+        { text: 'سورة العاديات', correct: false }
+    ]
+},
+{
+    title: 'السؤال 64',
+    question: 'ما هو الاسم الذي يطلق على سورة البقرة وسورة آل عمران معاً؟',
+    options: [
+        { text: 'الزهراوان', correct: true },
+        { text: 'النورين', correct: false },
+        { text: 'الكتابين', correct: false }
+    ]
+},
+{
+    title: 'السؤال 65',
+    question: 'من هو النبي الذي ابتلعه الحوت؟',
+    options: [
+        { text: 'نبي الله يونس', correct: true },
+        { text: 'نبي الله يوسف', correct: false },
+        { text: 'نبي الله زكريا', correct: false }
+    ]
+},
+{
+    title: 'السؤال 66',
+    question: 'ما هي السورة التي ذكر فيها "حمار العزيز"؟',
+    options: [
+        { text: 'سورة البقرة', correct: true },
+        { text: 'سورة الكهف', correct: false },
+        { text: 'سورة يوسف', correct: false }
+    ]
+},
+{
+    title: 'السؤال 67',
+    question: 'كم عدد السور المدنية في القرآن الكريم؟',
+    options: [
+        { text: '28 سورة', correct: true },
+        { text: '86 سورة', correct: false },
+        { text: '114 سورة', correct: false }
+    ]
+},
+{
+    title: 'السؤال 68',
+    question: 'ما هي السورة التي تسمى بـ "القتال"؟',
+    options: [
+        { text: 'سورة محمد', correct: true },
+        { text: 'سورة الأنفال', correct: false },
+        { text: 'سورة البقرة', correct: false }
+    ]
+},
+{
+    title: 'السؤال 69',
+    question: 'من هو الصحابي الذي لقب بـ "ذو النورين"؟',
+    options: [
+        { text: 'عثمان بن عفان', correct: true },
+        { text: 'علي بن أبي طالب', correct: false },
+        { text: 'أبو بكر الصديق', correct: false }
+    ]
+},
+{
+    title: 'السؤال 70',
+    question: 'ما هي السورة التي تسمى بـ "النور"؟',
+    options: [
+        { text: 'سورة النور', correct: true },
+        { text: 'سورة الأحزاب', correct: false },
+        { text: 'سورة الأنفال', correct: false }
+    ]
+},
+{
+    title: 'السؤال 71',
+    question: 'ما هو الاسم الذي أطلق على العام الذي توفي فيه أبو طالب وخديجة رضي الله عنها؟',
+    options: [
+        { text: 'عام الحزن', correct: true },
+        { text: 'عام الفيل', correct: false },
+        { text: 'عام الفتح', correct: false }
+    ]
+},
+{
+    title: 'السؤال 72',
+    question: 'من هو النبي الذي كان يسمى "خليل الله"؟',
+    options: [
+        { text: 'نبي الله إبراهيم', correct: true },
+        { text: 'نبي الله موسى', correct: false },
+        { text: 'نبي الله عيسى', correct: false }
+    ]
+},
+{
+    title: 'السؤال 73',
+    question: 'ما هي السورة التي تسمى بـ "العظيم"؟',
+    options: [
+        { text: 'سورة البقرة', correct: true },
+        { text: 'سورة الأنفال', correct: false },
+        { text: 'سورة النور', correct: false }
+    ]
+},
+{
+    title: 'السؤال 74',
+    question: 'من هو النبي الذي رفعه الله إلى السماء؟',
+    options: [
+        { text: 'نبي الله عيسى', correct: true },
+        { text: 'نبي الله موسى', correct: false },
+        { text: 'نبي الله يوسف', correct: false }
+    ]
+},
+{
+    title: 'السؤال 75',
+    question: 'ما هي السورة التي تسمى بـ "الكنز"؟',
+    options: [
+        { text: 'سورة الكهف', correct: true },
+        { text: 'سورة البقرة', correct: false },
+        { text: 'سورة آل عمران', correct: false }
+    ]
+},
+{
+    title: 'السؤال 76',
+    question: 'ما هو عدد سور القرآن الكريم؟',
+    options: [
+        { text: '114 سورة', correct: true },
+        { text: '120 سورة', correct: false },
+        { text: '110 سور', correct: false }
+    ]
+},
+{
+    title: 'السؤال 77',
+    question: 'من هو النبي الذي سمي بذي النون؟',
+    options: [
+        { text: 'نبي الله يونس', correct: true },
+        { text: 'نبي الله يوسف', correct: false },
+        { text: 'نبي الله شعيب', correct: false }
+    ]
+},
+{
+    title: 'السؤال 78',
+    question: 'ما هي السورة التي تسمى بـ "النساء الصغرى"؟',
+    options: [
+        { text: 'سورة الطلاق', correct: true },
+        { text: 'سورة النساء', correct: false },
+        { text: 'سورة الأحزاب', correct: false }
+    ]
+},
+{
+    title: 'السؤال 79',
+    question: 'من هو الصحابي الذي لقب بـ "سيف الله المسلول"؟',
+    options: [
+        { text: 'خالد بن الوليد', correct: true },
+        { text: 'علي بن أبي طالب', correct: false },
+        { text: 'عمر بن الخطاب', correct: false }
+    ]
+},
+{
+    title: 'السؤال 80',
+    question: 'ما هو عدد السور التي تبدأ بالحروف المقطعة؟',
+    options: [
+        { text: '29 سورة', correct: true },
+        { text: '14 سورة', correct: false },
+        { text: '19 سورة', correct: false }
+    ]
+},
+{
+    title: 'السؤال 81',
+    question: 'ما هي السورة التي تسمى بـ "الفرقان"؟',
+    options: [
+        { text: 'سورة الفرقان', correct: true },
+        { text: 'سورة البقرة', correct: false },
+        { text: 'سورة آل عمران', correct: false }
+    ]
+},
+{
+    title: 'السؤال 82',
+    question: 'من هو النبي الذي أمره الله ببناء السفينة؟',
+    options: [
+        { text: 'نبي الله نوح', correct: true },
+        { text: 'نبي الله موسى', correct: false },
+        { text: 'نبي الله إبراهيم', correct: false }
+    ]
+},
+{
+    title: 'السؤال 83',
+    question: 'ما هي السورة التي تسمى بـ "الإنسان"؟',
+    options: [
+        { text: 'سورة الإنسان', correct: true },
+        { text: 'سورة الأعراف', correct: false },
+        { text: 'سورة النور', correct: false }
+    ]
+},
+{
+    title: 'السؤال 84',
+    question: 'من هو الصحابي الذي لقب بـ "الفاروق"؟',
+    options: [
+        { text: 'عمر بن الخطاب', correct: true },
+        { text: 'أبو بكر الصديق', correct: false },
+        { text: 'عثمان بن عفان', correct: false }
+    ]
+},
+{
+    title: 'السؤال 85',
+    question: 'ما هي السورة التي تسمى بـ "الحج"؟',
+    options: [
+        { text: 'سورة الحج', correct: true },
+        { text: 'سورة النساء', correct: false },
+        { text: 'سورة النحل', correct: false }
+    ]
+},
+{
+    title: 'السؤال 86',
+    question: 'من هو النبي الذي ألقاه قومه في النار؟',
+    options: [
+        { text: 'نبي الله إبراهيم', correct: true },
+        { text: 'نبي الله موسى', correct: false },
+        { text: 'نبي الله عيسى', correct: false }
+    ]
+},
+{
+    title: 'السؤال 87',
+    question: 'ما هي السورة التي تسمى بـ "يوسف"؟',
+    options: [
+        { text: 'سورة يوسف', correct: true },
+        { text: 'سورة البقرة', correct: false },
+        { text: 'سورة مريم', correct: false }
+    ]
+},
+{
+    title: 'السؤال 88',
+    question: 'من هو الصحابي الذي لقب بـ "حب رسول الله"؟',
+    options: [
+        { text: 'زيد بن حارثة', correct: true },
+        { text: 'علي بن أبي طالب', correct: false },
+        { text: 'أبو بكر الصديق', correct: false }
+    ]
+},
+{
+    title: 'السؤال 89',
+    question: 'ما هي السورة التي تسمى بـ "النمل"؟',
+    options: [
+        { text: 'سورة النمل', correct: true },
+        { text: 'سورة القصص', correct: false },
+        { text: 'سورة الكهف', correct: false }
+    ]
+},
+{
+    title: 'السؤال 90',
+    question: 'من هو النبي الذي كان قومه ينحتون من الجبال بيوتاً؟',
+    options: [
+        { text: 'نبي الله صالح', correct: true },
+        { text: 'نبي الله هود', correct: false },
+        { text: 'نبي الله شعيب', correct: false }
+    ]
+},
+{
+    title: 'السؤال 91',
+    question: 'ما هي السورة التي تسمى بـ "الأعراف"؟',
+    options: [
+        { text: 'سورة الأعراف', correct: true },
+        { text: 'سورة النساء', correct: false },
+        { text: 'سورة المائدة', correct: false }
+    ]
+},
+{
+    title: 'السؤال 92',
+    question: 'من هو الصحابي الذي لقب بـ "الصديق"؟',
+    options: [
+        { text: 'أبو بكر الصديق', correct: true },
+        { text: 'عمر بن الخطاب', correct: false },
+        { text: 'عثمان بن عفان', correct: false }
+    ]
+},
+{
+    title: 'السؤال 93',
+    question: 'ما هي السورة التي تسمى بـ "الحديد"؟',
+    options: [
+        { text: 'سورة الحديد', correct: true },
+        { text: 'سورة النساء', correct: false },
+        { text: 'سورة النور', correct: false }
+    ]
+},
+{
+    title: 'السؤال 94',
+    question: 'من هو النبي الذي ولد بدون أب؟',
+    options: [
+        { text: 'نبي الله عيسى', correct: true },
+        { text: 'نبي الله موسى', correct: false },
+        { text: 'نبي الله إبراهيم', correct: false }
+    ]
+},
+{
+    title: 'السؤال 95',
+    question: 'ما هي السورة التي تسمى بـ "المجادلة"؟',
+    options: [
+        { text: 'سورة المجادلة', correct: true },
+        { text: 'سورة البقرة', correct: false },
+        { text: 'سورة الأنفال', correct: false }
+    ]
+},
+{
+    title: 'السؤال 96',
+    question: 'من هو الصحابي الذي لقب بـ "ذي النورين"؟',
+    options: [
+        { text: 'عثمان بن عفان', correct: true },
+        { text: 'علي بن أبي طالب', correct: false },
+        { text: 'أبو بكر الصديق', correct: false }
+    ]
+},
+{
+    title: 'السؤال 97',
+    question: 'ما هي السورة التي تسمى بـ "التحريم"؟',
+    options: [
+        { text: 'سورة التحريم', correct: true },
+        { text: 'سورة النساء', correct: false },
+        { text: 'سورة المائدة', correct: false }
+    ]
+},
+{
+    title: 'السؤال 98',
+    question: 'من هو النبي الذي أرسل إلى قوم عاد؟',
+    options: [
+        { text: 'نبي الله هود', correct: true },
+        { text: 'نبي الله صالح', correct: false },
+        { text: 'نبي الله شعيب', correct: false }
+    ]
+},
+{
+    title: 'السؤال 99',
+    question: 'ما هي السورة التي تسمى بـ "الممتحنة"؟',
+    options: [
+        { text: 'سورة الممتحنة', correct: true },
+        { text: 'سورة البقرة', correct: false },
+        { text: 'سورة آل عمران', correct: false }
+    ]
+},
+{
+    title: 'السؤال 100',
+    question: 'من هو النبي الذي أرسل إلى قوم مدين؟',
+    options: [
+        { text: 'نبي الله شعيب', correct: true },
+        { text: 'نبي الله صالح', correct: false },
+        { text: 'نبي الله هود', correct: false }
+    ]
+},
+            // أضف المزيد من الأسئلة هنا حتى تصل إلى 50 سؤال
+        ];
+
+        function checkAnswer(button, isCorrect, correctAnswer) {
+            if (isCorrect) {
+                button.style.backgroundColor = 'green';
+                document.getElementById('correct-answer').style.display = 'none';
+            } else {
+                button.style.backgroundColor = 'red';
+                document.getElementById('correct-answer').textContent = 'الإجابة الصحيحة: ' + correctAnswer;
+                document.getElementById('correct-answer').style.display = 'block';
+            }
+
+            document.querySelectorAll('.option').forEach(btn => {
+                btn.disabled = true;
+            });
+
+            document.getElementById('next-btn').style.display = 'inline-block';
+            document.getElementById('prev-btn').style.display = 'inline-block';
+        }
+
+        function loadQuiz(quizIndex) {
+            const quiz = quizzes[quizIndex];
+            document.getElementById('quiz-title').textContent = quiz.title;
+            document.getElementById('question').textContent = quiz.question;
+            const optionsContainer = document.querySelector('.options');
+            optionsContainer.innerHTML = '';
+            quiz.options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'option';
+                button.textContent = option.text;
+                button.onclick = () => checkAnswer(button, option.correct, quiz.options.find(opt => opt.correct).text);
+                optionsContainer.appendChild(button);
+            });
+
+            if (quizIndex === 0) {
+                document.getElementById('prev-btn').style.display = 'none';
+            } else {
+                document.getElementById('prev-btn').style.display = 'inline-block';
+            }
+
+            if (quizIndex === quizzes.length - 1) {
+                document.getElementById('next-btn').textContent = 'إعادة';
+            } else {
+                document.getElementById('next-btn').textContent = 'السؤال التالي';
+            }
+
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('correct-answer').style.display = 'none';
+        }
+
+        function loadNextQuiz() {
+            if (currentQuiz < quizzes.length - 1) {
+                currentQuiz++;
+                loadQuiz(currentQuiz);
+            } else {
+                currentQuiz = 0;
+                loadQuiz(currentQuiz);
+            }
+        }
+
+        function loadPrevQuiz() {
+            if (currentQuiz > 0) {
+                currentQuiz--;
+                loadQuiz(currentQuiz);
+            }
+        }
+
+        // تحميل الاختبار الأول عند فتح الصفحة
+        document.addEventListener('DOMContentLoaded', () => loadQuiz(currentQuiz));
+    </script>
+</body>
+</html>

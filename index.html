@@ -376,86 +376,86 @@
 <script type="text/javascript" src="//www.topcreativeformat.com/7613c4c818be3058c5f405c7adfed217/invoke.js"></script>
 
   <script>
-    const translations = {
-    const translations = {
-      en: {
-        title: "Islamic Finance",
-        description: "A comprehensive application for calculating inheritance, alimony, and zakat according to Islamic Sharia rules. It provides accurate and easy-to-use tools to calculate your financial obligations flexibly and professionally.",
-        settings: "Settings",
-        rateUs: "Rate Us",
-        share: "Share with Friends",
-        irt: "Calculate Inheritance",
-        zakah: "Calculate Zakat",
-        nafa9a: "Calculate Alimony",
-        convert: "Date Conversion",
-        kira2a: "Track Reading",
-      },
-      ar: {
-        title: "التمويل الإسلامي",
-        description: "تطبيق شامل لحساب الإرث، النفقة والزكاة وفقًا لأحكام الشريعة الإسلامية. يوفر أدوات دقيقة وسهلة الاستخدام لحساب التزاماتك المالية بمرونة واحترافية.",
-        settings: "الإعدادات",
-        rateUs: "قيمنا",
-        share: "شارك مع الأصدقاء",
-        irt: "حساب الإرث",
-        zakah: "حساب الزكاة",
-        nafa9a: "حساب النفقة",
-        convert: "تحويل التاريخ",
-        kira2a: "تتبع قرائتك",
-      }
-    };
-
-    document.addEventListener('DOMContentLoaded', (event) => {
-  const savedLanguage = localStorage.getItem('language') || 'ar';
-  applyLanguage(savedLanguage);
-
-  // إضافة مستمع للنقرة على زر الشارك
-  const shareButton = document.getElementById('shareButton');
-  shareButton.addEventListener('click', async () => {
-    try {
-      await navigator.share({
-        title: 'تطبيق التمويل الإسلامي',
-        text: 'تحقق من تطبيق التمويل الإسلامي لحساب الإرث، النفقة والزكاة وفقًا لأحكام الشريعة الإسلامية.',
-        url: 'https://example.com/islamic-finance-app',
-      });
-      console.log('تم مشاركة المحتوى بنجاح');
-    } catch (error) {
-      console.error('حدث خطأ أثناء مشاركة المحتوى:', error.message);
+  const translations = {
+    en: {
+      title: "Islamic Finance",
+      description: "A comprehensive application for calculating inheritance, alimony, and zakat according to Islamic Sharia rules. It provides accurate and easy-to-use tools to calculate your financial obligations flexibly and professionally.",
+      settings: "Settings",
+      rateUs: "Rate Us",
+      share: "Share with Friends",
+      irt: "Calculate Inheritance",
+      zakah: "Calculate Zakat",
+      nafa9a: "Calculate Alimony",
+      convert: "Date Conversion",
+      kira2a: "Track Reading",
+    },
+    ar: {
+      title: "التمويل الإسلامي",
+      description: "تطبيق شامل لحساب الإرث، النفقة والزكاة وفقًا لأحكام الشريعة الإسلامية. يوفر أدوات دقيقة وسهلة الاستخدام لحساب التزاماتك المالية بمرونة واحترافية.",
+      settings: "الإعدادات",
+      rateUs: "قيمنا",
+      share: "شارك مع الأصدقاء",
+      irt: "حساب الإرث",
+      zakah: "حساب الزكاة",
+      nafa9a: "حساب النفقة",
+      convert: "تحويل التاريخ",
+      kira2a: "تتبع قرائتك",
     }
+  };
+
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const savedLanguage = localStorage.getItem('language') || 'ar';
+    applyLanguage(savedLanguage);
+
+    // إضافة مستمع للنقرة على زر الشارك
+    const shareButton = document.getElementById('shareButton');
+    shareButton.addEventListener('click', async () => {
+      try {
+        await navigator.share({
+          title: 'تطبيق التمويل الإسلامي',
+          text: 'تحقق من تطبيق التمويل الإسلامي لحساب الإرث، النفقة والزكاة وفقًا لأحكام الشريعة الإسلامية.',
+          url: 'https://example.com/islamic-finance-app',
+        });
+        console.log('تم مشاركة المحتوى بنجاح');
+      } catch (error) {
+        console.error('حدث خطأ أثناء مشاركة المحتوى:', error.message);
+      }
+    });
   });
-});
 
-    function openMenu() {
-      document.getElementById("sideMenu").style.width = "50%";
-      document.getElementById("mainContent").classList.add("");
+  function openMenu() {
+    document.getElementById("sideMenu").style.width = "50%";
+    document.getElementById("mainContent").classList.add("");
+  }
+
+  function closeMenu() {
+    document.getElementById("sideMenu").style.width = "0";
+    document.getElementById("mainContent").classList.remove("blur");
+  }
+
+  function applyLanguage(language) {
+    const elementsToTranslate = document.querySelectorAll('[data-lang-key]');
+    elementsToTranslate.forEach(element => {
+      const key = element.getAttribute('data-lang-key');
+      element.textContent = translations[language][key];
+    });
+
+    if (language === 'ar') {
+      document.body.dir = 'rtl';
+      document.body.style.fontFamily = 'Tahoma, sans-serif';
+    } else {
+      document.body.dir = 'ltr';
+      document.body.style.fontFamily = 'Arial, sans-serif';
     }
 
-    function closeMenu() {
-      document.getElementById("sideMenu").style.width = "0";
-      document.getElementById("mainContent").classList.remove("blur");
-    }
+    localStorage.setItem('language', language);
+  }
 
-    function applyLanguage(language) {
-      const elementsToTranslate = document.querySelectorAll('[data-lang-key]');
-      elementsToTranslate.forEach(element => {
-        const key = element.getAttribute('data-lang-key');
-        element.textContent = translations[language][key];
-      });
-
-      if (language === 'ar') {
-        document.body.dir = 'rtl';
-        document.body.style.fontFamily = 'Tahoma, sans-serif';
-      } else {
-        document.body.dir = 'ltr';
-        document.body.style.fontFamily = 'Arial, sans-serif';
-      }
-
-      localStorage.setItem('language', language);
-    }
-	  function updateHijriDate() {
-            const hijriDate = moment().format('iD iMMMM iYYYY');
-            document.getElementById('hijriDate').innerText = hijriDate;
-        }
-        updateHijriDate();
+  function updateHijriDate() {
+    const hijriDate = moment().format('iD iMMMM iYYYY');
+    document.getElementById('hijriDate').innerText = hijriDate;
+  }
+  updateHijriDate();
   </script>
 </body>
 

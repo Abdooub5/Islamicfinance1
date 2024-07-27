@@ -24,18 +24,17 @@
        </div>
      </div>
   </header>
-	<style>
+  <style>
     body {
       margin: 0;
       padding: 0;
-      background-image: url('img1.jpg');
+      background-image: url('/img1.jpg');
       background-size: cover;
       background-position: center;
       text-align: center;
-      
     }
 
-     .menu-icon {
+    .menu-icon {
       position: absolute;
       top: 20px;
       left: 10px;
@@ -44,7 +43,8 @@
       color: white;
       z-index: 2;
       background-color: seagreen;
-     }
+    }
+
     .side-menu {
       height: 100%;
       width: 0;
@@ -57,7 +57,7 @@
       padding-top: 60px;
       color: white;
       z-index: 1;
-      background-image: url('img2.jpg');
+      background-image: url('/img2.jpg');
     }
 
     .side-menu a {
@@ -67,10 +67,6 @@
       color: white;
       display: block;
       transition: 0.3s;
-    }
-
-    .side-menu a:hover {
-      background-color: rgba(255, 255, 255, 0.1);
     }
 
     .side-menu .close-btn {
@@ -133,6 +129,7 @@
       filter: blur(2em);
       opacity: .7;
       transform: perspective(1.5em) rotateX(35deg) scale(1, .6);
+      
     }
 
     button:hover {
@@ -154,20 +151,20 @@
       margin: 0 auto;
       border-radius: 1em;
     }
-.btn {
+    .btn {
   outline: 0;
   display: inline-flex;
   align-items: left;
+  justify-content: space-between;
   bottom: 80px;
   left: 80px;
-  justify-content: space-between;
   background: #40B3A2;
-  min-width: 200px;
+  min-width: 150px;
   border: 0;
-  border-radius: 4px;
+  border-radius: 0.5em;
   box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
   box-sizing: border-box;
-  padding: 20px;
+  padding:  20px;
   color: #fff;
   font-size: 20px;
   font-weight: 600;
@@ -177,9 +174,9 @@
   cursor: pointer;
   height: 10%;
   margin-left: 5%;
-  margin-bottom: 0,5%;
-  
-  
+  margin-bottom: 0.5%;
+  padding-bottom: 35%;
+  color: black;
   
 }
 
@@ -201,7 +198,7 @@
     box-shadow: 0 0 0 20px rgba(255, 255, 255, 0.1), 0 0 0 40px rgba(255, 255, 255, 0.1), 0 0 0 60px rgba(255, 255, 255, 0.1), 0 0 0 80px rgba(255, 255, 255, 0);
   }
 }
-		header {
+header {
             font-family: Arial, sans-serif;
             direction: rtl;
         
@@ -314,7 +311,18 @@
             right: 10%;
             width: 1px;
             height: 100%;
-		}
+        }
+      .button-container {
+  display: flex;
+  justify-content: flex-start; /* لجعل الأزرار تبدأ من اليمين */
+  gap: 10px; /* المسافة بين الأزرار */
+  padding: 1px; /* لتوفير مسافة كافية حول الأزرار */
+  direction: rtl; /* لعرض الأزرار من اليمين إلى اليسار */
+  margin-right: 20%;
+}
+
+        
+
   </style>
 	<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة إسلامية </title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: black;
+        }
+        #gameContainer {
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 350px;
+            height: 654px;
+            background: #07182E;
+            overflow: hidden;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #gameContainer h2 {
+            z-index: 1;
+            color: white;
+            font-size: 2em;
+        }
+        #gameContainer::before {
+            content: '';
+            position: absolute;
+            width: 100px;
+            background-image: linear-gradient(180deg, rgb(0, 255, 0), rgb(255, 250, 0));
+            height: 130%;
+            animation: rotBGimg 3s linear infinite;
+            transition: all 0.2s linear;
+        }
+        @keyframes rotBGimg {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        #gameContainer::after {
+            content: '';
+            position: absolute;
+            background: #07182E;
+            inset: 5px;
+            border-radius: 15px;
+        }
+        #question {
+            font-size: 24px;
+            margin-bottom: 20px;
+            z-index: 1;
+            color: greenyellow;
+            border-radius: 1em;
+            border: solid grey;
+            border-width: 10px;
+        }
+        #options {
+            display: flex;
+            flex-direction: column;
+            z-index: 1;
+        }
+        .option {
+            background: transparent;
+            color: white;
+            border: 1px solid #414141;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            z-index: 1;
+        }
+        .option:hover {
+            background: #218838;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            z-index: 1;
+            border: solid gray;
+            border-radius: 1.5em;
+        }
+        #nextButton {
+            display: none;
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            z-index: 1;
+        }
+        #nextButton:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="question">سؤال هنا</div>
+        <div id="options">
+            <button class="option">خيار 1</button>
+            <button class="option">خيار 2</button>
+            <button class="option">خيار 3</button>
+            <button class="option">خيار 4</button>
+        </div>
+        <div id="result"></div>
+        <button id="nextButton">السؤال التالي</button>
+        
+        <!-- Card element example -->
+        <div class="card">
+            <h2>بطاقة</h2>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+        question: "ما هو الذكر الذي يُقال عند دخول المنزل؟",
+        options: ["بسم الله الرحمن الرحيم", "الحمد لله", "لا إله إلا الله", "سبحان الله"],
+        correct: "بسم الله الرحمن الرحيم"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال بعد الصلاة؟",
+        options: ["الله أكبر", "لا حول ولا قوة إلا بالله", "أستغفر الله", "الحمد لله"],
+        correct: "أستغفر الله"
+    },
+    {
+        question: "كم مرة يُقال 'سبحان الله' بعد الصلاة؟",
+        options: ["10", "25", "33", "100"],
+        correct: "33"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند ركوب السيارة؟",
+        options: ["سبحان الله", "بسم الله", "الحمد لله", "الله أكبر"],
+        correct: "بسم الله"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند الاستيقاظ من النوم؟",
+        options: ["الحمد لله الذي أحيانا بعد ما أماتنا", "بسم الله الرحمن الرحيم", "الله أكبر", "لا إله إلا الله"],
+        correct: "الحمد لله الذي أحيانا بعد ما أماتنا"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند الخروج من المنزل؟",
+        options: ["بسم الله توكلت على الله", "الحمد لله", "لا إله إلا الله", "سبحان الله"],
+        correct: "بسم الله توكلت على الله"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند دخول المسجد؟",
+        options: ["اللهم افتح لي أبواب رحمتك", "بسم الله", "الحمد لله", "لا إله إلا الله"],
+        correct: "اللهم افتح لي أبواب رحمتك"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند رؤية الهلال؟",
+        options: ["الله أكبر", "اللهم أهلَّه علينا باليمن والإيمان", "سبحان الله", "بسم الله"],
+        correct: "اللهم أهلَّه علينا باليمن والإيمان"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند زيارة المريض؟",
+        options: ["أسأل الله العظيم رب العرش العظيم أن يشفيك", "بسم الله", "الحمد لله", "الله أكبر"],
+        correct: "أسأل الله العظيم رب العرش العظيم أن يشفيك"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند الخروج من المسجد؟",
+        options: ["اللهم إني أسألك من فضلك", "الحمد لله", "سبحان الله", "بسم الله"],
+        correct: "اللهم إني أسألك من فضلك"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند سماع الرعد؟",
+        options: ["سبحان الله وبحمده", "الله أكبر", "لا إله إلا الله", "الحمد لله"],
+        correct: "سبحان الله وبحمده"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند رؤية المطر؟",
+        options: ["اللهم صيبًا نافعًا", "سبحان الله", "بسم الله", "لا إله إلا الله"],
+        correct: "اللهم صيبًا نافعًا"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند لبس الثوب الجديد؟",
+        options: ["الحمد لله الذي كساني هذا", "بسم الله الرحمن الرحيم", "الله أكبر", "سبحان الله"],
+        correct: "الحمد لله الذي كساني هذا"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند دخول السوق؟",
+        options: ["لا إله إلا الله وحده لا شريك له", "سبحان الله", "بسم الله", "الحمد لله"],
+        correct: "لا إله إلا الله وحده لا شريك له"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند رؤية الكعبة؟",
+        options: ["الله أكبر", "اللهم زد هذا البيت تشريفًا", "سبحان الله", "لا إله إلا الله"],
+        correct: "اللهم زد هذا البيت تشريفًا"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند الاستغفار؟",
+        options: ["أستغفر الله", "بسم الله", "سبحان الله", "الحمد لله"],
+        correct: "أستغفر الله"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند السجود؟",
+        options: ["سبحان ربي الأعلى", "الحمد لله", "الله أكبر", "بسم الله"],
+        correct: "سبحان ربي الأعلى"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند الركوع؟",
+        options: ["سبحان ربي العظيم", "الله أكبر", "الحمد لله", "بسم الله"],
+        correct: "سبحان ربي العظيم"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند رؤية نعمة؟",
+        options: ["الحمد لله", "الله أكبر", "سبحان الله", "بسم الله"],
+        correct: "الحمد لله"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند الكرب؟",
+        options: ["لا إله إلا الله", "بسم الله", "سبحان الله", "الله أكبر"],
+        correct: "لا إله إلا الله"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند الغضب؟",
+        options: ["أعوذ بالله من الشيطان الرجيم", "بسم الله", "الحمد لله", "لا إله إلا الله"],
+        correct: "أعوذ بالله من الشيطان الرجيم"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند الفزع؟",
+        options: ["سبحان الله", "بسم الله", "الله أكبر", "لا إله إلا الله"],
+        correct: "الله أكبر"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند النسيان؟",
+        options: ["سبحان الله", "الله أكبر", "بسم الله", "لا حول ولا قوة إلا بالله"],
+        correct: "لا حول ولا قوة إلا بالله"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند الوقوف على القبر؟",
+        options: ["السلام عليكم أهل الديار", "سبحان الله", "بسم الله", "الحمد لله"],
+        correct: "السلام عليكم أهل الديار"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند دخول المنزل الجديد؟",
+        options: ["بسم الله", "سبحان الله", "الله أكبر", "الحمد لله"],
+        correct: "بسم الله"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند الخوف؟",
+        options: ["حسبي الله لا إله إلا هو", "بسم الله", "سبحان الله", "الحمد لله"],
+        correct: "حسبي الله لا إله إلا هو"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند العطاس؟",
+        options: ["الحمد لله", "سبحان الله", "الله أكبر", "بسم الله"],
+        correct: "الحمد لله"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند السفر؟",
+        options: ["سبحان الذي سخر لنا هذا", "بسم الله", "الله أكبر", "الحمد لله"],
+        correct: "سبحان الذي سخر لنا هذا"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند النوم؟",
+        options: ["باسمك اللهم أموت وأحيا", "سبحان الله", "الحمد لله", "الله أكبر"],
+        correct: "باسمك اللهم أموت وأحيا"
+    },
+    {
+        question: "ما هو الذكر الذي يُقال عند الدعاء؟",
+        options: ["اللهم آمين", "بسم الله", "سبحان الله", "الحمد لله"],
+        correct: "اللهم آمين"
+    }
+        ];
+
+        let currentQuestionIndex = 0;
+        let correctAnswersCount = 0;
+
+        const questionElement = document.getElementById('question');
+        const optionsContainer = document.getElementById('options');
+        const resultElement = document.getElementById('result');
+        const nextButton = document.getElementById('nextButton');
+
+        function loadQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            questionElement.textContent = currentQuestion.question;
+            optionsContainer.innerHTML = '';
+            currentQuestion.options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'option';
+                button.textContent = option;
+                button.addEventListener('click', () => checkAnswer(option));
+                optionsContainer.appendChild(button);
+            });
+            resultElement.textContent = '';
+            nextButton.style.display = 'none';
+        }
+
+        function checkAnswer(selectedOption) {
+            const currentQuestion = questions[currentQuestionIndex];
+            if (selectedOption === currentQuestion.correct) {
+                resultElement.textContent = 'إجابة صحيحة!';
+                resultElement.style.color = 'green';
+                correctAnswersCount++;
+            } else {
+                resultElement.textContent = `إجابة خاطئة! الإجابة الصحيحة هي: ${currentQuestion.correct}`;
+                resultElement.style.color = 'red';
+            }
+            nextButton.style.display = 'block';
+        }
+
+        nextButton.addEventListener('click', () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                questionElement.textContent = 'لقد أنهيت المسابقة!';
+                optionsContainer.innerHTML = '';
+                resultElement.textContent = `نتيجتك: ${correctAnswersCount} من ${questions.length}`;
+                nextButton.style.display = 'none';
+            }
+        });
+
+        loadQuestion();
+    </script>
+</body>
+</html>
